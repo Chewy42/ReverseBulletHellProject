@@ -47,6 +47,9 @@ TagManager:
   - name: Player
     uniqueID: 3282549689
     locked: 0
+  - name: HealthBars
+    uniqueID: 3346268201
+    locked: 0
   - name: TouchWheel
     uniqueID: 290045237
     locked: 0

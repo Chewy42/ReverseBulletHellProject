@@ -6,6 +6,21 @@ public class Player : Character
 {
     public GameObject TouchWheel;
     public GameObject CircleInTouchWheel;
+    public SpriteRenderer PlayerSprite;
+    public static Player Instance;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -20,8 +35,8 @@ public class Player : Character
     }
     
     private void Move()
-    {
-        foreach (Touch touch in Input.touches)
+{
+    foreach (Touch touch in Input.touches)
     {
         switch (touch.phase)
         {
@@ -32,15 +47,19 @@ public class Player : Character
                 TouchWheel.GetComponent<RectTransform>().anchoredPosition = Vector2.zero + new Vector2(0, -410);
                 break;
             case TouchPhase.Moved:
-                // get the direction of the touch
-                Vector2 direction = (touch.position - (Vector2)TouchWheel.transform.position).normalized;
-
-                // clamp the circle's position within the bounds of the touch wheel
-                float radius = TouchWheel.GetComponent<RectTransform>().rect.width / 2;
-                CircleInTouchWheel.transform.position = Vector2.ClampMagnitude(direction, radius) + (Vector2)TouchWheel.transform.position;
-
+                // move the circle in the touch wheel in the direction of the touch, but do not let the circle leave the touch wheel
+                CircleInTouchWheel.GetComponent<RectTransform>().anchoredPosition = Vector2.ClampMagnitude(touch.position - new Vector2(Screen.width / 2, Screen.height / 2), 100);
                 // move the player in the direction of the touch
-                rb.velocity = direction * movement_speed;
+                rb.velocity = (touch.position - new Vector2(Screen.width / 2, Screen.height / 2)).normalized * movement_speed;
+                //flip sprite based on direction of movement
+                if (rb.velocity.x > 0)
+                {
+                    PlayerSprite.flipX = false;
+                }
+                else if (rb.velocity.x < 0)
+                {
+                    PlayerSprite.flipX = true;
+                }
                 break;
             case TouchPhase.Ended:
                 // stop the player
@@ -53,5 +72,15 @@ public class Player : Character
                 break;
         }
     }
+}
+    public GameObject GetParent()
+    {
+        GameObject parent = null;
+        if (transform.parent!= null)
+        {
+            parent = transform.parent.gameObject;
+        }
+        return parent;
     }
+
 }
