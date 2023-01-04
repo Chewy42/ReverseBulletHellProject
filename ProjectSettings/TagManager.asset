@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -52,4 +53,7 @@ TagManager:
     locked: 0
   - name: TouchWheel
     uniqueID: 290045237
+    locked: 0
+  - name: UI
+    uniqueID: 1754477937
     locked: 0
